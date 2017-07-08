@@ -26,12 +26,18 @@ You can contribute in this project, and welcome
 ## Installation
 
 Clone Repository
+```
 $ https://github.com/sandiwo/laravue.git
+```
 
 Rename .env.example to .env and change setting accordingly
 
 Run the Composer
+```
 $ composer install
+```
 
 Run the install process
+```
 $ php artisan install:app
+```
