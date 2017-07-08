@@ -30,7 +30,7 @@ Clone Repository
 $ https://github.com/sandiwo/laravue.git
 ```
 
-Rename .env.example to .env and change setting accordingly
+Rename ```.env.example``` to ```.env``` and change setting accordingly
 
 Run the Composer
 ```
