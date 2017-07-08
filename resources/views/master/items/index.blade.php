@@ -110,6 +110,7 @@
 					result => {
 						this.rows = result.data,
 						this.endLoading()
+						this.checkAll()
 					}
 				);
 			},
