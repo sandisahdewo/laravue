@@ -57,11 +57,14 @@
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
-                                    <li v-for="unread in notificationUnread">
-                                        <a href="#" title="Click to read this notification" v-on:click="markAsRead(unread.id)">Item <b>@{{ unread.name }}</b> @{{ unread.status }}</a>
+                                    <li v-for="unread in allNotification">
+                                        <a href="#" title="Click to read this notification" v-on:click="markAsRead(unread.id)" v-if="unread.read_at == null">Item <b>@{{ unread.data.item_name }}</b> @{{ unread.data.status }}</a>
                                     </li>
                                     <li v-show="countNotification == 0">
                                         <a href="#">No unread notification.</a>
+                                    </li>
+                                    <li v-for="read in allNotification">
+                                        <a href="#" title="Readed Notification" style="background-color:#b3b6bc" v-if="read.read_at !== null">Item <b>@{{ read.data.item_name }}</b> @{{ read.data.status }}</a>
                                     </li>
                                 </ul>
                             </li>
@@ -113,7 +116,7 @@
             el: '#notification',
             data: {
                 countNotification: 0,
-                notificationUnread: []
+                allNotification: []
             },
             created() {
                 this.counting()
@@ -128,9 +131,9 @@
                     );
                 },
                 getNotification: function() {
-                    axios.get('{{ route('get.unread.notification') }}').then(
+                    axios.get('{{ route('get.all.notification') }}').then(
                         result => {
-                            this.notificationUnread = result.data
+                            this.allNotification = result.data
                         }
                     );
                 },

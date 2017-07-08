@@ -14,17 +14,26 @@ class NotificationController extends Controller
     	$result = [];
     	foreach(auth()->user()->unreadNotifications as $key => $notification) {
     		$result[$key]['id'] = $notification->id;
-            $result[$key]['name'] = $notification->data['item_name'];
-    		$result[$key]['status'] = $notification->data['status'];
+            $result[$key]['data'] = $notification->data;
+            $result[$key]['read_at'] = $notification->read_at;
     	}
     	return $result;
+    }
+
+    public function getAllNotification() {
+        $result = [];
+        foreach(auth()->user()->notifications as $key => $notification) {
+            $result[$key]['id'] = $notification->id;
+            $result[$key]['data'] = $notification->data;
+            $result[$key]['read_at'] = $notification->read_at;
+        }
+        return $result;
     }
 
     public function markAsReadNotification($id) {
     	foreach(auth()->user()->unreadNotifications as $notification) {
     		if($notification->id == $id) {
 	    		$notification->markAsRead();
-	    		$notification->delete();
     		}
     	}
     	return response()->json(['success' => true]);

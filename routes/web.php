@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function() {
 	});
 	Route::get('count-unread-notification', 'NotificationController@countUnreadNotification')->name('count.unread.notification');
 	Route::get('get-unread-notification', 'NotificationController@getUnreadNotification')->name('get.unread.notification');
+	Route::get('get-all-notification', 'NotificationController@getAllNotification')->name('get.all.notification');
 	Route::get('mark-read-notification/{id}', 'NotificationController@markAsReadNotification')->name('mark.read.notification');
 });
 
