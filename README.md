@@ -17,11 +17,11 @@ You can contribute in this project, and welcome
 
 ## Requirements
 
-- [PHP]
-- [Composer]()
-- [MySQL Database]()
-- [Laravel]()
-- [VueJS]()
+- [PHP](http://php.net/)
+- [Composer](https://getcomposer.org/)
+- [MySQL Database](https://www.mysql.com/)
+- [Laravel](https://laravel.com)
+- [VueJS](https://vuejs.org/)
 
 ## Installation
 
