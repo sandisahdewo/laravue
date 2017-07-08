@@ -83,7 +83,7 @@
 				var vm = this
 				this.$validator.validateAll().then(function(isValid) {
 					if(!isValid) return;
-					vm.loading = true
+					vm.startLoading()
 					var url = webUrl+'master/items'
 					var message = 'Create new items successfully'
 
@@ -97,7 +97,7 @@
 						vm.getRows()
 						vm.createNew()
 						vm.showMessage(message)
-						vm.loading = false
+						vm.endLoading()
 						notif.counting()
                 		notif.getNotification()
 					}).catch(function(e) {
@@ -109,7 +109,7 @@
 				axios.get('{{ route('api.master.items.get') }}').then(
 					result => {
 						this.rows = result.data,
-						this.loading = false
+						this.endLoading()
 					}
 				);
 			},
@@ -123,7 +123,7 @@
 			},
 			edit: function(id) {
 				this.onEdit = id
-				this.loading = true
+				this.startLoading()
 				this.newItems = {
 					selected:false,
 					code:'', 
@@ -133,7 +133,7 @@
 					result => {
 						this.newItems.code = result.data.code,
 						this.newItems.name = result.data.name,
-						this.loading = false
+						this.endLoading()
 					},
 				);
 			},
@@ -163,7 +163,7 @@
 				var conf = confirm("Apakah yakin akan menghapus?");
 				if(!conf) return true;
 				var vm = this;
-				this.loading = true
+				this.startLoading()
 				this.rows.forEach(function(row) {
 					if(row.selected) {
 						vm.delete.push({id:row.id})
@@ -174,10 +174,16 @@
 					vm.selectedAll = false
 					vm.createNew()
 					vm.showMessage('Delete items successfully')
-					vm.loading = false
+					vm.endLoading()
 				})
 				notif.counting()
                 notif.getNotification()
+			},
+			startLoading: function() {
+				this.loading = true
+			},
+			endLoading: function() {
+				this.loading = false
 			},
 			showMessage: function(message, status = 'success') {
 				this.message = {text:message, status:status}
