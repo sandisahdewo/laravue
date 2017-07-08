@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('index');
+    return view('welcome');
 });
 Route::middleware('auth')->group(function() {
 	Route::prefix('master')->group(function() {
