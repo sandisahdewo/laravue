@@ -10,7 +10,7 @@
                 <div class="panel-body">
                 	<h3 v-if="loading" class="text-info">Loading...</h3>
                 	<h3 v-if="message" class="text-success">@{{ message.text }}</h3>
-                    <form id="itemsForm" class="form-horizontal" v-on:submit.prevent="validateBeforeSubmit">
+                    <form id="itemsForm" enctype="multipart/form-data" class="form-horizontal" v-on:submit.prevent="validateBeforeSubmit">
                     {{ csrf_field() }}
                     	<div v-bind:class="{'form-group':true, 'col-md-8':true, 'col-md-offset-2' : true, 'has-error':errors.has('code')}">
                     		<label for="code" class="control-label">Code</label>
@@ -66,7 +66,7 @@
 			newItems: {
 				selected: false,
 				code: '',
-				name: ''
+				name: '',
 			},
 			rows: [],
 			onEdit: false,
@@ -116,20 +116,20 @@
 			},
 			createNew: function() {
 				this.onEdit = false
+				this.blankItems()
+			},
+			blankItems: function() {
 				this.newItems = {
 					selected:false,
 					code:'', 
-					name:''
+					name:'',
 				}
 			},
 			edit: function(id) {
 				this.onEdit = id
 				this.startLoading()
-				this.newItems = {
-					selected:false,
-					code:'', 
-					name:''
-				}
+				this.blankItems()
+
 				axios.get(apiUrl+'master/items/find/'+id).then(
 					result => {
 						this.newItems.code = result.data.code,

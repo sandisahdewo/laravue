@@ -40,6 +40,7 @@ class InstallApp extends Command
     public function handle()
     {
         $this->info('Starting installation...');
+        $this->info('Running file App\Console\Commands\InstallApp');
 
         if (!File::exists('.env')) {
             $this->error('File Not Found: .env');
@@ -51,6 +52,9 @@ class InstallApp extends Command
         Artisan::call('key:generate');
         $this->info('Migrating Database...');
         Artisan::call('migrate');
+        $this->info('Seeding...');
+        Artisan::call('db:seed');
+        $this->info('You can login with email:secret@secret.com & password:secret');
         $this->info('Done!');
     }
 }
