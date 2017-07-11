@@ -30,6 +30,7 @@
 </template>
 <script>
 	import { get } from '../../../helpers/api'
+	import Flash from '../../../helpers/flash'
 	export default {
 		data() {
 			return {
@@ -58,6 +59,7 @@
 				get('master/categories/delete/'+id).
 					then((res) => {
 						if(res.status === 200) this.getData()
+						Flash.setSuccess('Delete category success.')
 					})
 					.catch((err) => {
 

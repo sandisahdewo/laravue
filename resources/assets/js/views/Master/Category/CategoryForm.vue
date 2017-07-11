@@ -18,8 +18,8 @@
 				        		<span v-if="error.name" class="text-danger">{{ error.name[0] }}</span>
 				        	</div>
 				        	<div class="form-group col-md-12">
-				        		<button class="btn btn-primary" v-if="!isEdit">Create New</button>
-				        		<button class="btn btn-primary" v-if="isEdit">Update</button>
+				        		<button class="btn btn-primary" v-if="!isEdit" :disabled="isProcessing">Create New</button>
+				        		<button class="btn btn-primary" v-if="isEdit" :disabled="isProcessing">Update</button>
 				        		<router-link to="/category/table" v-if="!isEdit" class="btn btn-default">Cancel</router-link>
 				        		<button type="button" @click="addNew" class="btn btn-default" v-if="isEdit">Add New</button>
 				        	</div>
@@ -33,6 +33,7 @@
 <script>
 	import { get } from '../../../helpers/api'
 	import { post } from '../../../helpers/api'
+	import Flash from '../../../helpers/flash'
 	export default {
 		data() {
 			return {
@@ -63,14 +64,18 @@
 				this.isProcessing = true
 				this.error = {}
 				let url = 'master/categories'
+				let msg = 'Create category success.'
 				if(this.isEdit) {
 					url = 'master/categories/update/'+this.$route.params.id
+					msg = 'Update category success.'
 				}
 				post(url, this.form).
 					then((res) => {
 						if(res.status === 200) {
+							Flash.setSuccess(msg)
 							this.$router.push('/category/table')
 						}
+						this.isProcessing = false
 					})
 					.catch((err) => {
 						if(err.response.status === 422) {

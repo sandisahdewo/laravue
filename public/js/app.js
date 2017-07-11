@@ -11701,7 +11701,7 @@ process.umask = function() { return 0; };
 
 var Component = __webpack_require__(1)(
   /* script */
-  null,
+  __webpack_require__(62),
   /* template */
   __webpack_require__(40),
   /* scopeId */
@@ -11998,7 +11998,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("Register")])], 1)])])])]), _vm._v(" "), _c('div', {
     staticClass: "container"
-  }, [_c('router-view')], 1)])
+  }, [(_vm.flash.success) ? _c('div', {
+    staticClass: "alert alert-success col-md-8 col-md-offset-2"
+  }, [_c('strong', [_vm._v("Success!")]), _vm._v(" " + _vm._s(_vm.flash.success) + "\n        \t")]) : _vm._e(), _vm._v(" "), (_vm.flash.error) ? _c('div', {
+    staticClass: "alert alert-error col-md-8 col-md-offset-2"
+  }, [_c('strong', [_vm._v("Error!")]), _vm._v(" " + _vm._s(_vm.flash.error) + "\n        \t")]) : _vm._e(), _vm._v(" "), _c('router-view')], 1)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "navbar-header"
@@ -14811,6 +14815,7 @@ if (false) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_api__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_flash__ = __webpack_require__(63);
 //
 //
 //
@@ -14843,6 +14848,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -14877,13 +14883,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.isProcessing = true;
 			this.error = {};
 			var url = 'master/categories';
+			var msg = 'Create category success.';
 			if (this.isEdit) {
 				url = 'master/categories/update/' + this.$route.params.id;
+				msg = 'Update category success.';
 			}
 			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__helpers_api__["b" /* post */])(url, this.form).then(function (res) {
 				if (res.status === 200) {
+					__WEBPACK_IMPORTED_MODULE_1__helpers_flash__["a" /* default */].setSuccess(msg);
 					_this2.$router.push('/category/table');
 				}
+				_this2.isProcessing = false;
 			}).catch(function (err) {
 				if (err.response.status === 422) {
 					_this2.error = err.response.data;
@@ -15021,9 +15031,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v(_vm._s(_vm.error.name[0]))]) : _vm._e()]), _vm._v(" "), _c('div', {
     staticClass: "form-group col-md-12"
   }, [(!_vm.isEdit) ? _c('button', {
-    staticClass: "btn btn-primary"
+    staticClass: "btn btn-primary",
+    attrs: {
+      "disabled": _vm.isProcessing
+    }
   }, [_vm._v("Create New")]) : _vm._e(), _vm._v(" "), (_vm.isEdit) ? _c('button', {
-    staticClass: "btn btn-primary"
+    staticClass: "btn btn-primary",
+    attrs: {
+      "disabled": _vm.isProcessing
+    }
   }, [_vm._v("Update")]) : _vm._e(), _vm._v(" "), (!_vm.isEdit) ? _c('router-link', {
     staticClass: "btn btn-default",
     attrs: {
@@ -15144,6 +15160,86 @@ if (false) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_api__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_flash__ = __webpack_require__(63);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			rows: {}
+		};
+	},
+	created: function created() {
+		this.getData();
+	},
+
+	methods: {
+		getData: function getData() {
+			var _this = this;
+
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__helpers_api__["a" /* get */])('master/categories').then(function (res) {
+				_this.rows = res.data;
+			}).catch(function (err) {});
+		},
+		editData: function editData(id) {
+			this.$router.push({ path: '/category/form/' + id });
+		},
+		deleteData: function deleteData(id) {
+			var _this2 = this;
+
+			var confirmDelete = confirm('Are you sure?');
+			if (!confirmDelete) return;
+			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__helpers_api__["a" /* get */])('master/categories/delete/' + id).then(function (res) {
+				if (res.status === 200) _this2.getData();
+				__WEBPACK_IMPORTED_MODULE_1__helpers_flash__["a" /* default */].setSuccess('Delete category success.');
+			}).catch(function (err) {});
+		}
+	}
+});
+
+/***/ }),
+/* 62 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_flash__ = __webpack_require__(63);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -15179,33 +15275,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
-			rows: {}
+			flash: __WEBPACK_IMPORTED_MODULE_0__helpers_flash__["a" /* default */].state
 		};
+	}
+});
+
+/***/ }),
+/* 63 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+	state: {
+		success: null,
+		error: null
 	},
-	created: function created() {
-		this.getData();
+	setSuccess: function setSuccess(message) {
+		var _this = this;
+
+		this.state.success = message;
+		setTimeout(function () {
+			_this.removeSuccess();
+		}, 3000);
 	},
+	setError: function setError(message) {
+		var _this2 = this;
 
-	methods: {
-		getData: function getData() {
-			var _this = this;
-
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__helpers_api__["a" /* get */])('master/categories').then(function (res) {
-				_this.rows = res.data;
-			}).catch(function (err) {});
-		},
-		editData: function editData(id) {
-			this.$router.push({ path: '/category/form/' + id });
-		},
-		deleteData: function deleteData(id) {
-			var _this2 = this;
-
-			var confirmDelete = confirm('Are you sure?');
-			if (!confirmDelete) return;
-			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__helpers_api__["a" /* get */])('master/categories/delete/' + id).then(function (res) {
-				if (res.status === 200) _this2.getData();
-			}).catch(function (err) {});
-		}
+		this.state.error = message;
+		setTimeout(function () {
+			_this2.removeSuccess();
+		}, 10000);
+	},
+	removeSuccess: function removeSuccess() {
+		this.state.success = null;
+	},
+	removeError: function removeError() {
+		this.state.error = null;
 	}
 });
 

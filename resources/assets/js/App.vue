@@ -23,7 +23,23 @@
 	        </div>
         </div>
         <div class="container">
+        	<div class="alert alert-success col-md-8 col-md-offset-2" v-if="flash.success">
+        		<strong>Success!</strong> {{ flash.success }}
+        	</div>
+        	<div class="alert alert-error col-md-8 col-md-offset-2" v-if="flash.error">
+        		<strong>Error!</strong> {{ flash.error }}
+        	</div>
         	<router-view></router-view>
         </div>
 	</div>
 </template>
+<script>
+	import Flash from './helpers/flash'
+	export default {
+		data() {
+			return {
+				flash: Flash.state
+			}
+		}
+	}
+</script>
