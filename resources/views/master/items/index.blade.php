@@ -1,60 +1,62 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Form Items</div>
+<div id="app">	
+	<div class="container">
+	    <div class="row">
+	        <div class="col-md-8 col-md-offset-2">
+	            <div class="panel panel-default">
+	                <div class="panel-heading">Form Items</div>
 
-                <div class="panel-body">
-                	<h3 v-if="loading" class="text-info">Loading...</h3>
-                	<h3 v-if="message" class="text-success">@{{ message.text }}</h3>
-                    <form id="itemsForm" enctype="multipart/form-data" class="form-horizontal" v-on:submit.prevent="validateBeforeSubmit">
-                    {{ csrf_field() }}
-                    	<div v-bind:class="{'form-group':true, 'col-md-8':true, 'col-md-offset-2' : true, 'has-error':errors.has('code')}">
-                    		<label for="code" class="control-label">Code</label>
-                    		<input type="text" v-validate="'required|numeric'" id="code" v-model="newItems.code" name="code" class="form-control">
-                    		<span v-show="errors.has('code')" class="text-danger">@{{ errors.first('code') }}</span>
-                    	</div>
-                    	<div v-bind:class="{'form-group':true, 'col-md-8':true, 'col-md-offset-2' : true, 'has-error':errors.has('name')}">
-                    		<label for="name" class="control-label">Name</label>
-                    		<input type="text" v-validate="'required'" id="name" v-model="newItems.name" name="name" class="form-control">
-                    		<span v-show="errors.has('name')" class="text-danger">@{{ errors.first('name') }}</span>
-                    	</div>
-                    	<div class="form-group col-md-8 col-md-offset-2">
-                    		<button v-if="!onEdit" class="btn btn-primary">Add New</button>
-                    		<button v-if="onEdit" class="btn btn-primary">Update</button>
-                    		<button type="reset" class="btn btn-default">Reset</button>
-                    		<button v-if="onEdit" v-on:click="createNew" class="btn btn-info">Create New</button>
-                    	</div>
-                    </form>
-                    <div class="col-md-12">
-                    	<h3>
-                    		Data Items
-                    		<button v-on:click="deleteSelected" class="btn btn-danger pull-right">Delete Selected</button>
-                    	</h3>
-                    </div>
-                    <table class="table table-stripped">
-                    	<tr>
-                    		<th><input type="checkbox" v-on:click="checkAll" v-model="selectedAll"></th>
-                    		<th>Code</th>
-                    		<th>Name</th>
-                    		<th>Action</th>
-                    	</tr>
-                    	<tr v-for="row in rows">
-                    		<td><input type="checkbox" v-model="row.selected" v-on:click="checkSelectAll"></td>
-                    		<td>@{{ row.code }}</td>
-                    		<td>@{{ row.name }}</td>
-                    		<td>
-                    			<button class="btn btn-primary" v-on:click="edit(row.id)">Edit</button>
-                    		</td>
-                    	</tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+	                <div class="panel-body">
+	                	<h3 v-if="loading" class="text-info">Loading...</h3>
+	                	<h3 v-if="message" class="text-success">@{{ message.text }}</h3>
+	                    <form id="itemsForm" enctype="multipart/form-data" class="form-horizontal" v-on:submit.prevent="validateBeforeSubmit">
+	                    {{ csrf_field() }}
+	                    	<div v-bind:class="{'form-group':true, 'col-md-8':true, 'col-md-offset-2' : true, 'has-error':errors.has('code')}">
+	                    		<label for="code" class="control-label">Code</label>
+	                    		<input type="text" v-validate="'required|numeric'" id="code" v-model="newItems.code" name="code" class="form-control">
+	                    		<span v-show="errors.has('code')" class="text-danger">@{{ errors.first('code') }}</span>
+	                    	</div>
+	                    	<div v-bind:class="{'form-group':true, 'col-md-8':true, 'col-md-offset-2' : true, 'has-error':errors.has('name')}">
+	                    		<label for="name" class="control-label">Name</label>
+	                    		<input type="text" v-validate="'required'" id="name" v-model="newItems.name" name="name" class="form-control">
+	                    		<span v-show="errors.has('name')" class="text-danger">@{{ errors.first('name') }}</span>
+	                    	</div>
+	                    	<div class="form-group col-md-8 col-md-offset-2">
+	                    		<button v-if="!onEdit" class="btn btn-primary">Add New</button>
+	                    		<button v-if="onEdit" class="btn btn-primary">Update</button>
+	                    		<button type="reset" class="btn btn-default">Reset</button>
+	                    		<button v-if="onEdit" v-on:click="createNew" class="btn btn-info">Create New</button>
+	                    	</div>
+	                    </form>
+	                    <div class="col-md-12">
+	                    	<h3>
+	                    		Data Items
+	                    		<button v-on:click="deleteSelected" class="btn btn-danger pull-right">Delete Selected</button>
+	                    	</h3>
+	                    </div>
+	                    <table class="table table-stripped">
+	                    	<tr>
+	                    		<th><input type="checkbox" v-on:click="checkAll" v-model="selectedAll"></th>
+	                    		<th>Code</th>
+	                    		<th>Name</th>
+	                    		<th>Action</th>
+	                    	</tr>
+	                    	<tr v-for="row in rows">
+	                    		<td><input type="checkbox" v-model="row.selected" v-on:click="checkSelectAll"></td>
+	                    		<td>@{{ row.code }}</td>
+	                    		<td>@{{ row.name }}</td>
+	                    		<td>
+	                    			<button class="btn btn-primary" v-on:click="edit(row.id)">Edit</button>
+	                    		</td>
+	                    	</tr>
+	                    </table>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 </div>
 @endsection
 @push('vue')

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Items extends Migration
+class Categories extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class Items extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('categories', function(Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique();
             $table->string('name');
-            $table->integer('categori_id')->unsigned()
-                                          ->references('id')
-                                          ->on('categori')
-                                          ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class Items extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('categories');
     }
 }
