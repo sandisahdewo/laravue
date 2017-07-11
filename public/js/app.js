@@ -11996,7 +11996,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/register"
     }
-  }, [_vm._v("Register")])], 1)])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Register")])], 1), _vm._v(" "), _c('li', [_c('router-link', {
+    attrs: {
+      "to": "/logout"
+    }
+  }, [_vm._v("Logout")])], 1)])])])]), _vm._v(" "), _c('div', {
     staticClass: "container"
   }, [(_vm.flash.success) ? _c('div', {
     staticClass: "alert alert-success col-md-8 col-md-offset-2"
@@ -15235,6 +15239,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_flash__ = __webpack_require__(63);
+//
 //
 //
 //
