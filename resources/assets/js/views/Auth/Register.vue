@@ -49,17 +49,17 @@
 					password_confirmation:''
 				},
 				error: {},
-				isProcessing: false
+				loading: false
 			}
 		},
 		methods: {
 			submit: function() {
-				this.isProcessing = true
+				this.loading = true
 				this.error = {}
-				post('/register', this.form).
+				post('api/register', this.form).
 					then((res) => {
-						if(res.response.success) {
-							
+						if(res.data.registered) {
+							this.$router.push('/')
 						}
 					})
 					.catch((err) => {
@@ -67,7 +67,7 @@
 							this.error = err.response.data
 							console.log(this.error)
 						}
-						this.isProcessing = false
+						this.loading = false
 					})
 			}
 		}

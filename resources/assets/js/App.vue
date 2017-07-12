@@ -16,9 +16,9 @@
 		                <li><router-link to="/category/table">Category</router-link></li>
 		            </ul>
                     <ul class="nav navbar-nav navbar-right">
-	                    <li><router-link to="/login">Login</router-link></li>
-	                    <li><router-link to="/register">Register</router-link></li>
-	                    <li><router-link to="/logout">Logout</router-link></li>
+	                    <li><router-link to="/login" v-if="!authCheck">Login</router-link></li>
+	                    <li><router-link to="/register" v-if="!authCheck">Register</router-link></li>
+	                    <li><a @click.stop="logout" v-if="authCheck">Logout</a></li>
 	                </ul>
 		        </div>
 	        </div>
@@ -27,7 +27,7 @@
         	<div class="alert alert-success col-md-8 col-md-offset-2" v-if="flash.success">
         		<strong>Success!</strong> {{ flash.success }}
         	</div>
-        	<div class="alert alert-error col-md-8 col-md-offset-2" v-if="flash.error">
+        	<div class="alert alert-danger col-md-8 col-md-offset-2" v-if="flash.error">
         		<strong>Error!</strong> {{ flash.error }}
         	</div>
         	<router-view></router-view>
@@ -35,11 +35,37 @@
 	</div>
 </template>
 <script>
+	import { post } from './helpers/api'
 	import Flash from './helpers/flash'
+	import Auth from './store/auth'
 	export default {
+		created() {
+			Auth.initialize()
+		},
 		data() {
 			return {
-				flash: Flash.state
+				flash: Flash.state,
+				auth: Auth.state
+			}
+		},
+		computed: {
+			authCheck() {
+				if(this.auth.api_token && this.auth.user_id) {
+					return true
+				}
+				return false
+			}
+		},
+		methods: {
+			logout() {
+				post('/api/logout', {id:this.auth.user_id})
+					.then((res) => {
+						if(res.data.logged_out) {
+							Auth.remove()
+							Flash.setSuccess('Logged out successfully')
+							this.$router.push('/login')
+						}
+					})
 			}
 		}
 	}

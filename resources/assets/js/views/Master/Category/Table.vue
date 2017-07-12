@@ -7,13 +7,15 @@
 					<router-link to="/category/form" class="btn btn-primary">Create New</router-link>
 	                </div>
 	                <div class="panel-body">
-						<table class="table table-striped">
+						<table class="table">
 							<tr>
+								<th>#</th>
 								<th>Code</th>
 								<th>Name</th>
 								<th class="text-center">Action</th>
 							</tr>
-							<tr v-for="row in rows">
+							<tr v-for="(row, i) in rows">
+								<td>{{ i+=1 }}</td>
 								<td>{{ row.code }}</td>
 								<td>{{ row.name }}</td>
 								<td width="150">
@@ -51,7 +53,7 @@
 					})
 			},
 			editData: function(id) {
-				this.$router.push({path:'/category/form/'+id})
+				this.$router.push('/category/form/'+id)
 			},
 			deleteData: function(id) {
 				let confirmDelete = confirm('Are you sure?')

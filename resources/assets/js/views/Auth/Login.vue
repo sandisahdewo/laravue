@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div class="row">
-	        <div class="col-md-8 col-md-offset-2">
+	        <div class="col-md-6 col-md-offset-3">
 	            <div class="panel panel-default">
-	                <div class="panel-heading">Register</div>
+	                <div class="panel-heading">Login</div>
 
 	                <div class="panel-body">
 						<form @submit.prevent="submit" class="form-horizontal">
@@ -18,7 +18,7 @@
 				        		<span v-if="error.password" class="text-danger">{{ error.password[0] }}</span>
 				        	</div>
 				        	<div class="form-group col-md-12">
-				        		<button class="btn btn-primary">Login</button>
+				        		<button class="btn btn-primary" :disabled="loading">Login</button>
 				        		<button class="btn btn-default">Reset</button>
 				        	</div>
 						</form>
@@ -30,6 +30,8 @@
 </template>
 <script>
 	import { post } from '../../helpers/api'
+	import Flash from '../../helpers/flash'
+	import Auth from '../../store/auth'
 	export default {
 		data() {
 			return {
@@ -38,25 +40,28 @@
 					password:''
 				},
 				error: {},
-				isProcessing: false
+				loading: false
 			}
 		},
 		methods: {
 			submit: function() {
-				this.isProcessing = true
+				this.loading = true
 				this.error = {}
-				post('/login', this.form).
+				post('api/login', this.form).
 					then((res) => {
-						if(res.response.success) {
-
+						if(res.data.logged_in) {
+							Auth.set(res.data.api_token, res.data.user_id)
+							Flash.setSuccess('Welcome! You logged in')
+						} else if(res.data.failed) {
+							Flash.setError(res.data.message)
 						}
+						this.loading = false
 					})
 					.catch((err) => {
 						if(err.response.status === 422) {
 							this.error = err.response.data
-							console.log(this.error)
-						}
-						this.isProcessing = false
+						} 
+						this.loading = false
 					})
 			}
 		}

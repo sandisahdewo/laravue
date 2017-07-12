@@ -11,9 +11,9 @@
 |
 */
 
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
+Route::get('/', function () {
+    return view('master.category.index');
+});
 // Route::middleware('auth')->group(function() {
 	Route::prefix('master')->group(function() {
 		Route::namespace('Master')->group(function() {
@@ -21,10 +21,6 @@
 			Route::post('items', 'ItemsController@create')->name('master.items.create');
 			Route::get('items/find/{id}', 'ItemsController@find')->name('master.items.find');
 			Route::post('items/delete', 'ItemsController@delete')->name('api.master.items.delete');
-		
-			Route::get('/', function() {
-				return view('master.category.index');
-			});
 
 			Route::get('categories', 'CategoriesController@get')->name('master.categories');
 			Route::get('categories/find/{id}', 'CategoriesController@find')->name('master.categories.find');

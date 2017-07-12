@@ -31,8 +31,7 @@
 	</div>
 </template>
 <script>
-	import { get } from '../../../helpers/api'
-	import { post } from '../../../helpers/api'
+	import { get, post } from '../../../helpers/api'
 	import Flash from '../../../helpers/flash'
 	export default {
 		data() {
