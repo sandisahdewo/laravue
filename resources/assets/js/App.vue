@@ -11,11 +11,12 @@
 	                </button>
 	            </div>
 	            <div class="collapse navbar-collapse" id="app-navbar-collapse">
-		            <ul class="nav navbar-nav">
-		                <li><router-link to="/item">Item</router-link></li>
+		            <ul class="nav navbar-nav" v-if="authCheck">
+		                <li><router-link to="/item/table">Item</router-link></li>
 		                <li><router-link to="/category/table">Category</router-link></li>
 		            </ul>
                     <ul class="nav navbar-nav navbar-right">
+                    	<li><router-link to="/notification" v-if="authCheck">Notification <span class="badge">{{ notification.unreadTotal }}</span></router-link></li>
 	                    <li><router-link to="/login" v-if="!authCheck">Login</router-link></li>
 	                    <li><router-link to="/register" v-if="!authCheck">Register</router-link></li>
 	                    <li><a @click.stop="logout" v-if="authCheck">Logout</a></li>
@@ -35,17 +36,21 @@
 	</div>
 </template>
 <script>
-	import { post } from './helpers/api'
+	import { post, get } from './helpers/api'
 	import Flash from './helpers/flash'
 	import Auth from './store/auth'
+	import Notification from './helpers/notification'
+
 	export default {
 		created() {
-			Auth.initialize()
+			Auth.initialize(),
+			Notification.count()
 		},
 		data() {
 			return {
 				flash: Flash.state,
-				auth: Auth.state
+				auth: Auth.state,
+				notification: Notification.state
 			}
 		},
 		computed: {

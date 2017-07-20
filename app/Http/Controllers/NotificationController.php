@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use JWTAuth;
 
 class NotificationController extends Controller
 {
     public function countUnreadNotification() {
-    	return count(auth()->user()->unreadNotifications);
+    	return count(JWTAuth::parseToken()->authenticate()->unreadNotifications);
     }
 
     public function getUnreadNotification() {
     	$result = [];
-    	foreach(auth()->user()->unreadNotifications as $key => $notification) {
+    	foreach(JWTAuth::parseToken()->authenticate()->unreadNotifications as $key => $notification) {
     		$result[$key]['id'] = $notification->id;
             $result[$key]['data'] = $notification->data;
             $result[$key]['read_at'] = $notification->read_at;
@@ -22,7 +23,7 @@ class NotificationController extends Controller
 
     public function getAllNotification() {
         $result = [];
-        foreach(auth()->user()->notifications as $key => $notification) {
+        foreach(JWTAuth::parseToken()->authenticate()->notifications as $key => $notification) {
             $result[$key]['id'] = $notification->id;
             $result[$key]['data'] = $notification->data;
             $result[$key]['read_at'] = $notification->read_at;
@@ -31,7 +32,7 @@ class NotificationController extends Controller
     }
 
     public function markAsReadNotification($id) {
-    	foreach(auth()->user()->unreadNotifications as $notification) {
+    	foreach(JWTAuth::parseToken()->authenticate()->unreadNotifications as $notification) {
     		if($notification->id == $id) {
 	    		$notification->markAsRead();
     		}

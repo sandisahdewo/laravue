@@ -19,7 +19,7 @@
 				        	</div>
 				        	<div class="form-group col-md-12">
 				        		<button class="btn btn-primary" :disabled="loading">Login</button>
-				        		<button class="btn btn-default">Reset</button>
+				        		<button @click.prevent="reset" class="btn btn-default">Reset</button>
 				        	</div>
 						</form>
 	                </div>
@@ -44,25 +44,28 @@
 			}
 		},
 		methods: {
-			submit: function() {
+			submit() {
 				this.loading = true
 				this.error = {}
 				post('api/login', this.form).
 					then((res) => {
 						if(res.data.logged_in) {
 							Auth.set(res.data.api_token, res.data.user_id)
+							this.$router.push('/')
 							Flash.setSuccess('Welcome! You logged in')
-						} else if(res.data.failed) {
-							Flash.setError(res.data.message)
-						}
-						this.loading = false
-					})
-					.catch((err) => {
-						if(err.response.status === 422) {
-							this.error = err.response.data
 						} 
 						this.loading = false
 					})
+					.catch((err) => {
+						if(err.response.status === 422)
+							this.error = err.response.data
+						else if(err.response.status === 501)
+							Flash.setError(err.response.data)
+						this.loading = false
+					})
+			},
+			reset() {
+				this.form = {}
 			}
 		}
 	}

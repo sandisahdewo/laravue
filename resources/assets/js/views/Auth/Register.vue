@@ -28,7 +28,7 @@
 				        	</div>
 				        	<div class="form-group col-md-12">
 				        		<button class="btn btn-primary">Register</button>
-				        		<button class="btn btn-default">Reset</button>
+				        		<button @click.prevent="reset" class="btn btn-default">Reset</button>
 				        	</div>
 						</form>
 	                </div>
@@ -53,7 +53,7 @@
 			}
 		},
 		methods: {
-			submit: function() {
+			submit() {
 				this.loading = true
 				this.error = {}
 				post('api/register', this.form).
@@ -69,6 +69,9 @@
 						}
 						this.loading = false
 					})
+			},
+			reset() {
+				this.form = {}
 			}
 		}
 	}

@@ -4,41 +4,42 @@ namespace App\Http\Controllers\Master;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Items;
+use App\Models\Item;
 use DB;
 
-class ItemsController extends Controller
+class ItemController extends Controller
 {
     public function index() {
     	return view('master.items.index');
     }
 
     public function get() {
-    	return Items::all();
+    	return Item::with('category')->get();
     }
 
     public function create(Request $request) {
     	$this->validate($request, [
     		'code' => 'required|numeric',
-    		'name' => 'required'
+    		'name' => 'required',
+            'category_id' => 'required'
     	]);
-
-        $items = Items::create($request->all());
+        $items = Item::create($request->all());
 
     	return response()->json(['success' => true]);
     }
 
     public function find($id) {
-    	return Items::find($id);
+    	return Item::with('category')->find($id);
     }
 
     public function update(Request $request, $id) {
         $this->validate($request, [
             'code' => 'required|numeric',
-            'name' => 'required'
+            'name' => 'required',
+            'category_id' => 'required'
         ]);
 
-        Items::find($id)->update($request->all());
+        Item::find($id)->update($request->all());
 
         return response()->json(['success' => true]);
     }
@@ -46,7 +47,7 @@ class ItemsController extends Controller
     public function delete(Request $request) {
         DB::transaction(function() use ($request){
             foreach ($request->all() as $value) {
-                Items::destroy($value['id']);
+                Item::destroy($value['id']);
             }
         });
         return response()->json(['success' => true]);

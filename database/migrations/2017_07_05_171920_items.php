@@ -17,7 +17,7 @@ class Items extends Migration
             $table->increments('id');
             $table->string('code')->unique();
             $table->string('name');
-            $table->integer('categori_id')->unsigned()
+            $table->integer('category_id')->unsigned()
                                           ->references('id')
                                           ->on('categori')
                                           ->onDelete('cascade');

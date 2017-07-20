@@ -3,7 +3,7 @@
 		<div class="row">
 	        <div class="col-md-8 col-md-offset-2">
 	            <div class="panel panel-default">
-	                <div class="panel-heading">Form Category</div>
+	                <div class="panel-heading">Form Item</div>
 
 	                <div class="panel-body">
 						<form @submit.prevent="submit" class="form-horizontal">
@@ -18,9 +18,17 @@
 				        		<span v-if="error.name" class="text-danger">{{ error.name[0] }}</span>
 				        	</div>
 				        	<div class="form-group col-md-12">
-				        		<button class="btn btn-primary" v-if="!isEdit" :disabled="isProcessing">Create New</button>
-				        		<button class="btn btn-primary" v-if="isEdit" :disabled="isProcessing">Update</button>
-				        		<router-link to="/category/table" v-if="!isEdit" class="btn btn-default">Cancel</router-link>
+				        		<label for="category">Category</label>
+				        		<select name="category" v-model="form.category_id" id="cateogry" class="form-control">
+				        			<option :value="defaultOption">-- Choose Category --</option>
+				        			<option v-for="category in categories" :value="category.id">{{ category.name }}</option>
+				        		</select>
+				        		<span v-if="error.category_id" class="text-danger">{{ error.category_id[0] }}</span>
+				        	</div>
+				        	<div class="form-group col-md-12">
+				        		<button class="btn btn-primary" v-if="!isEdit" :disabled="loading">Create New</button>
+				        		<button class="btn btn-primary" v-if="isEdit" :disabled="loading">Update</button>
+				        		<router-link to="/item/table" v-if="!isEdit" class="btn btn-default">Cancel</router-link>
 				        		<button type="button" @click="addNew" class="btn btn-default" v-if="isEdit">Add New</button>
 				        	</div>
 						</form>
@@ -38,20 +46,27 @@
 			return {
 				form: {
 					code:'',
-					name:''
+					name:'',
+					category_id:''
 				},
+				categories: {},
 				error: {},
-				isProcessing: false,
+				loading: false,
 				isEdit: false
 			}
 		},
 		created() {
+			this.getCategories()
 			let id = this.$route.params.id
 			if(id) {
-				get('/api/master/category/find/'+id).
+				get('/api/master/item/find/'+id).
 					then((res) => {
 						this.isEdit = true
-						this.form = { code:res.data.code, name:res.data.name }
+						this.form = { 
+							code:res.data.code, 
+							name:res.data.name,
+							category_id:res.data.category.id
+						}
 					})
 					.catch((err) => {
 						console.log(err)
@@ -59,34 +74,45 @@
 			}
 		},
 		methods: {
+			getCategories() {
+				get('/api/master/category/get').
+					then((res) => {
+						this.categories = res.data
+					})
+			},
 			submit() {
-				this.isProcessing = true
+				this.loading = true
 				this.error = {}
-				let url = '/api/master/category/create'
-				let msg = 'Create category success.'
+				let url = '/api/master/item/create'
+				let msg = 'Create item success.'
 				if(this.isEdit) {
-					url = '/api/master/category/update/'+this.$route.params.id
-					msg = 'Update category success.'
+					url = '/api/master/item/update/'+this.$route.params.id
+					msg = 'Update item success.'
 				}
 				post(url, this.form).
 					then((res) => {
 						if(res.status === 200) {
 							Flash.setSuccess(msg)
-							this.$router.push('/category/table')
+							this.$router.push('/item/table')
 						}
-						this.isProcessing = false
+						this.loading = false
 					})
 					.catch((err) => {
 						if(err.response.status === 422) {
 							this.error = err.response.data
 						}
-						this.isProcessing = false
+						this.loading = false
 					})
 			},
 			addNew() {
 				this.isEdit = false
-				this.$router.push('/category/form')
+				this.$router.push('/item/form')
 				this.form = { code:'', name:'' }
+			}
+		},
+		computed: {
+			defaultOption() {
+				return ''
 			}
 		}
 	}

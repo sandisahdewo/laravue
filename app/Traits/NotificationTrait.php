@@ -2,15 +2,15 @@
 
 namespace App\Traits;
 
-use App\Notifications\ItemsNotification;
+use App\Notifications\ItemNotification;
 
 trait NotificationTrait {
 
-	public function makeItemsNotification($items, $status = 'default') {
+	public function makeItemNotification($items, $status = 'default') {
 		$this->notify($items, $status);
 	}
 
 	public function notify($items, $status) {
-        auth()->user()->notify(new ItemsNotification($items, $status));
+        auth()->user()->notify(new ItemNotification($items, $status));
 	}
 }

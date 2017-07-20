@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\User;
 use Hash;
+use JWTAuth;
+use App\User;
+use Illuminate\Http\Request;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
@@ -25,6 +27,23 @@ class AuthController extends Controller
 		        ]);
     }
 
+    /*public function login(Request $request) {
+        $credentials = $request->only('email', 'password');
+
+        try {
+            // attempt to verify the credentials and create a token for the user
+            if (! $token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'invalid_credentials'], 401);
+            }
+        } catch (JWTException $e) {
+            // something went wrong whilst attempting to encode the token
+            return response()->json(['error' => 'could_not_create_token'], 500);
+        }
+
+        // all good so return the token
+        return response()->json(compact('token'));
+    }*/
+
     public function login(Request $request) {
     	$this->validate($request, [
     		'email' => 'required|string|email|max:255',
@@ -35,7 +54,8 @@ class AuthController extends Controller
     				->first();
 
     	if($user && Hash::check($request->password, $user->password)) {
-    		$user->api_token = str_random(90);
+            $apiToken = JWTAuth::fromUser($user);
+    		$user->api_token = $apiToken;
     		$user->save();
 
     		return response()
@@ -46,11 +66,7 @@ class AuthController extends Controller
     			]);
     	}
 
-    	return response()
-    		->json([
-    			'failed' => true,
-    			'message' => 'These credentials do not match our records.'
-    		]);
+    	return response('These credentials do not match our records.', 501);
     }
 
     public function logout(Request $request) {
