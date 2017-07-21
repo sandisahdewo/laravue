@@ -34,6 +34,7 @@
 </template>
 <script>
 	import { get, post } from '../../../helpers/api'
+	import Notification from '../../../helpers/notification'
 	import Flash from '../../../helpers/flash'
 	export default {
 		data() {
@@ -99,6 +100,7 @@
 				post('/api/master/item/delete', this.delete)
 				.then((res) => {
 					if(res.status === 200) this.getData()
+					Notification.count()
 					Flash.setSuccess('Delete item success.')
 				})
 				.catch((err) => {

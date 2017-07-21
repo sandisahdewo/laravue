@@ -5,7 +5,7 @@ export default {
 		unreadTotal : 0
 	},
 	count() {
-		get('/count-unread-notification')
+		get('api/count-unread-notification')
 			.then((res) => {
 				this.state.unreadTotal = res.data
 			})

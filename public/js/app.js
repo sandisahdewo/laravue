@@ -12080,7 +12080,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_api__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_flash__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_notification__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_flash__ = __webpack_require__(1);
 //
 //
 //
@@ -12115,6 +12116,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -12182,7 +12184,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			});
 			__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__helpers_api__["a" /* post */])('/api/master/item/delete', this.delete).then(function (res) {
 				if (res.status === 200) _this2.getData();
-				__WEBPACK_IMPORTED_MODULE_1__helpers_flash__["a" /* default */].setSuccess('Delete item success.');
+				__WEBPACK_IMPORTED_MODULE_1__helpers_notification__["a" /* default */].count();
+				__WEBPACK_IMPORTED_MODULE_2__helpers_flash__["a" /* default */].setSuccess('Delete item success.');
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -16654,7 +16657,7 @@ module.exports = function listToStyles (parentId, list) {
 	count: function count() {
 		var _this = this;
 
-		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api__["b" /* get */])('/count-unread-notification').then(function (res) {
+		__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api__["b" /* get */])('api/count-unread-notification').then(function (res) {
 			_this.state.unreadTotal = res.data;
 		});
 	}
